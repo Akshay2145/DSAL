@@ -36,7 +36,7 @@ public:
         header = new Node(999);
         header->right = header->left = header;
     }
-    void insert(int d)
+void insert(int d)
 {
     if (root == NULL)
     {

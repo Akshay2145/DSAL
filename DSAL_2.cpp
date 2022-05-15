@@ -241,7 +241,8 @@ int main()
             getline(cin,a);
             if(d.search(d.root,a)==1)
             {
-                d.root = d.del(d.root,a);
+                d.root = 
+                d.del(d.root,a);
                 cout<<"\nEnter keyword: ";
                 getline(cin,b);
                 cout<<"\nEnter meaning: ";

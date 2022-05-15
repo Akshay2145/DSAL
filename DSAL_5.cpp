@@ -98,7 +98,7 @@ public:
 			if(t!=NULL){
 				cout<<"\nIndex: "<<i<<" ----> ";
 				while(t->next!=NULL){
-					cout<<t->key<<","<<t->value<<" ] ----> ";
+					cout<<t->key<<","<<t->value<<"  ----> ";
 					t = t->next;
 				}
 				cout<<t->key<<","<<t->value<<endl;

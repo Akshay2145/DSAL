@@ -249,12 +249,12 @@ class Tree
         }
         if(S->right != NULL)
         {
-            T->left = new Node(S->right->data);
+            // T->left = new Node(S->right->data);
             T->left = mirror(T->left,S->right);
         }
         if(S->left != NULL)
         {
-            T->right = new Node(S->left->data);
+            // T->right = new Node(S->left->data);
             T->right = mirror(T->right,S->left);
         }
         return T;
