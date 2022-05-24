@@ -1,119 +1,175 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
 
-class Office
+class Node
 {
-	int n;
-	int a[10][10];
-	string office[10];
 public:
-	void input();
-	void display();
-	void Prims();
+    int data;
+    Node *next;
+
+    Node()
+    {
+        data = 0;
+        next = NULL;
+    }
+    Node(int val)
+    {
+        data = val;
+        next = NULL;
+    }
+
+    friend class Graph;
 };
 
-void Office::input()
+class Graph
 {
-	cout<<"\nEnter no. of offices: ";
-	cin>>n;
-	cout<<"\nEnter the names of offices: ";
-	for(int i=0 ; i<n ; i++)
-	cin >> office[i];
+    int max_size;
+    Node *arr[20];
 
-	cout<<"\nEnter the cost to connect the offices: ";
-	for(int i=0 ; i<n ; i++)
-	for(int j=i ; j<n ; j++)
-	{
-	if(i==j)
-	{
-	a[i][j] = 0;
-	continue;
-	}
+    // int edge_list_length;
 
-	cout<<"\nEnter the cost to connect " << office[i] <<" and " << office[j]<< " : ";
-	cin >> a[i][j];
-	a[j][i] = a[i][j];
-	}
-	}
+public:
+    Graph()
+    {
+        max_size = 0;
+    }
+    Graph(int max)
+    {
+        max_size = max;
+        for (int i = 0; i < max_size; i++)
+        {
+            arr[i] = NULL;
+        }
+    }
+    void addEdge(int src_vertex, int dest_vertex)
+    {
+        Node *newn1 = new Node;
+        newn1->data = dest_vertex;
+      
+        Node *temp;
 
-	void Office::display()
-	{
+        if (arr[src_vertex] == NULL)
+        {
+            arr[src_vertex] = newn1;
+        }
+        else
+        {
+            temp = arr[src_vertex];
+            while (temp->next != NULL)
+            {
+                temp = temp->next;
+            }
+            temp->next = newn1;
+        }
+    }
 
-	for(int i=0 ; i<n ; i++)
-	{
-	cout<<"\n";
-	for(int j=0 ; j<n ; j++)
-	{
-	cout<<a[i][j] << "\t";
-	}
-	}
+    void display()
+    {
+        for (int i = 0; i < max_size; i++)
+        {
+            cout << "Vertex " << i << " -> ";
+            Node *temp = arr[i];
+            while (temp != NULL)
+            {
+                cout << temp->data << " ";
+                temp = temp->next;
+            }
+            cout << endl;
+        }
+    }
+
+    void topological_sort()
+    {
+        int in_degrees[max_size];
+        for (int i = 0; i < max_size; i++)
+        {
+            in_degrees[i] = 0;
+        }
+        for (int i = 0; i < max_size; i++) 
+        {
+            Node *temp = arr[i];
+            while (temp != NULL)
+            {
+
+                in_degrees[temp->data] = in_degrees[temp->data] + 1;
+                temp = temp->next;
+            }
+        }
+
+        while (true)
+        {
+            int c = 0;
+            while (in_degrees[c] != 0 && c < max_size)
+            {
+                c++;
+            }
+            if (c < max_size)
+            {
+                cout << c << " ";
+                in_degrees[c] = -1;
+                Node *t = arr[c];
+
+                while (t != NULL)
+                {
+                    in_degrees[t->data]--;
+                    t = t->next;
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+};
+
+int main()
+{
+    //    Graph g(5);
+    int vertices;
+    cout << "\nEnter Number of Vertices of the Graph";
+    cin >> vertices;
+    Graph g(vertices);
+    int ch, v, d, e;
+    do
+    {
+        cout << "\n\n----------Main-Menu--------------"
+                "\n1)Create Graph"
+                "\n2)Display Graph"
+                "\n3)Topological Sort"
+                "\n4)Exit"
+                "\n\n\tEnter Your Choice";
+        cin >> ch;
+        switch (ch)
+        {
+        case 1:
+            cout << "\nEnter Total Number of Edges ::";
+            cin >> e;
+            for (int i = 0; i < e; i++)
+            {
+                cout << "\nEnter Source Vertex ::";
+                cin >> v;
+                cout << "\nEnter Destination Vertex ::";
+                cin >> d;
+                g.addEdge(v, d);
+                cout << "\nEdge Added";
+            }
+            break;
+        case 2:
+            g.display();
+            break;
+        case 3:
+            g.topological_sort();
+            break;
+        case 4:
+            cout << "\nProgram Exited";
+            break;
+        default:
+            cout << "\nEnter Correct Choice";
+            break;
+        }
+
+    } while (ch != 4);
+   
+    return 0;
 }
-
-	void Office::Prims()
-	{
-	 int visit[n], minCost=0, count=1, minIndex, cost=0;
-	 for(int i=0 ; i<n ; i++)
-	 visit[i] = 0;
-
-	 cout<<"\n\nShortest path: ";
-	 visit[0]=1;
-	 cout<<office[0] << " -> ";
-	 while(1)
-	 {
-	 minCost = 10000;
-	 for(int i=0 ; i<n ; i++)
-	 {
-	 for(int j=0 ; j<n ; j++)
-	 {
-	 if(visit[i]==1 && a[i][j]!=0 && a[i][j]< minCost && visit[j]==0)
-	 {
-	 minCost = a[i][j];
-	 minIndex = j;
-	 }
-	 }
-	 }
-	 visit[minIndex]=1;
-	 cout<<office[minIndex] << " -> ";
-	 cost = cost + minCost;
-	 count++;
-
-	 if(count==n)
-	 break;
-	 }
-
-	 cout<<"\nMinimum cost: "<<cost;
-
-	}
-
-	int main()
-	{
-	 Office o1;
-	 int choice;
-	MENU:
-	 cout<<"\n\nMINIMUM SPANNING TREE";
-	 cout<<"\n1. Input data";
-	 cout<<"\n2. Display data";
-	 cout<<"\n3. Calculate minimum cost";
-	 cout<<"\n4. Exit";
-	 cout<<"\nEnter your choice: ";
-	 cin >> choice;
-	 switch(choice)
-	 {
-	 case 1:
-	 o1.input();
-	 break;
-	 case 2:
-	 o1.display();
-	 break;
-	 case 3:
-	 o1.Prims();
-	 break;
-	 case 4:
-	 return 0;
-	 default:
-	 cout<<"\nInvalid choice.Try again!";
-	 }
-	 if(choice != 5)
-	 goto MENU;
-	 return 0;
-	}

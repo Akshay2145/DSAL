@@ -232,9 +232,7 @@ int main()
             cout<<"\nEnter meaning: ";
             getline(cin,b);
             d.insert(d.root,d.Create_node(a,b));
-
             break;
-
         case 6:
             cout<<"\nEnter keyword which u want to update: ";
             cin.ignore();
